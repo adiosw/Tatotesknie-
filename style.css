@@ -1,21 +1,26 @@
 /* ====================================
-   CSS Variables - Color Palette
+   CSS Variables - DARK THEME Color Palette
    ==================================== */
 :root {
-    /* Nostalgic paper colors */
-    --color-paper: #faf8f3;
-    --color-paper-dark: #f5f2ea;
-    --color-ink: #2d2d2d;
-    --color-ink-light: #6b6b6b;
-    --color-sepia: #8b7355;
-    --color-accent: #9d8b7a;
-    --color-accent-light: #c4b5a0;
+    /* Dark nostalgic colors - nocny pamiętnik */
+    --color-bg-dark: #1a1612;
+    --color-bg-medium: #2a241f;
+    --color-paper-dark: #332d26;
+    --color-paper: #3d362e;
     
-    /* Candle colors */
+    --color-text-primary: #e8dfd2;
+    --color-text-secondary: #c4b5a0;
+    --color-text-muted: #9d8b7a;
+    
+    --color-sepia: #d4a574;
+    --color-accent: #c4976f;
+    --color-accent-light: #e5c9a8;
+    
+    /* Candle colors - bardziej widoczne na ciemnym tle */
     --color-flame: #ffa500;
     --color-flame-bright: #ffcc00;
     --color-flame-core: #fff5e6;
-    --color-smoke: rgba(139, 115, 85, 0.15);
+    --color-smoke: rgba(228, 201, 168, 0.25);
     
     /* Spacing */
     --spacing-xs: 0.5rem;
@@ -28,9 +33,10 @@
     --font-serif: 'Playfair Display', serif;
     --font-body: 'Crimson Text', serif;
     
-    /* Shadows */
-    --shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.08);
-    --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.12);
+    /* Shadows - dostosowane do ciemnego tła */
+    --shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.4);
+    --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.6);
+    --glow-warm: 0 0 20px rgba(212, 165, 116, 0.3);
 }
 
 /* ====================================
@@ -48,8 +54,8 @@ html {
 
 body {
     font-family: var(--font-body);
-    background-color: var(--color-paper);
-    color: var(--color-ink);
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-primary);
     line-height: 1.7;
     font-size: 18px;
     overflow-x: hidden;
@@ -67,26 +73,28 @@ body {
             0deg,
             transparent,
             transparent 2px,
-            rgba(139, 115, 85, 0.02) 2px,
-            rgba(139, 115, 85, 0.02) 4px
+            rgba(228, 201, 168, 0.03) 2px,
+            rgba(228, 201, 168, 0.03) 4px
         );
     pointer-events: none;
     z-index: 1;
+    opacity: 0.5;
 }
 
 /* ====================================
-   CANDLE ANIMATION (Subtle Background)
+   CANDLE ANIMATION (Widoczna na ciemnym tle!)
    ==================================== */
 .candle-scene {
     position: fixed;
-    top: 20%;
+    top: 15%;
     left: 50%;
     transform: translateX(-50%);
     width: 100px;
     height: 200px;
     z-index: 0;
-    opacity: 0.4;
+    opacity: 0.7;
     pointer-events: none;
+    filter: drop-shadow(var(--glow-warm));
 }
 
 /* Candle body */
@@ -98,9 +106,10 @@ body {
     width: 30px;
     height: 80px;
     background: linear-gradient(to bottom, 
-        rgba(139, 115, 85, 0.3), 
-        rgba(139, 115, 85, 0.5));
+        rgba(212, 165, 116, 0.6), 
+        rgba(212, 165, 116, 0.8));
     border-radius: 3px 3px 0 0;
+    box-shadow: 0 0 15px rgba(212, 165, 116, 0.3);
 }
 
 /* Flame */
@@ -109,8 +118,8 @@ body {
     bottom: 75px;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;
-    height: 35px;
+    width: 22px;
+    height: 40px;
     background: linear-gradient(to top, 
         var(--color-flame) 0%, 
         var(--color-flame-bright) 50%, 
@@ -118,6 +127,9 @@ body {
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     animation: flicker 2s ease-in-out infinite;
     filter: blur(1px);
+    box-shadow: 
+        0 0 20px rgba(255, 165, 0, 0.8),
+        0 0 40px rgba(255, 165, 0, 0.4);
 }
 
 .flame-glow {
@@ -125,22 +137,23 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 30px;
-    height: 40px;
+    width: 50px;
+    height: 60px;
     background: radial-gradient(circle, 
-        rgba(255, 204, 0, 0.4) 0%, 
+        rgba(255, 204, 0, 0.6) 0%, 
+        rgba(255, 165, 0, 0.3) 40%,
         transparent 70%);
     border-radius: 50%;
     animation: glow 2s ease-in-out infinite;
 }
 
-/* Smoke trails rising up */
+/* Smoke trails rising up - bardziej widoczne */
 .smoke-trail {
     position: absolute;
-    bottom: 110px;
+    bottom: 115px;
     left: 50%;
-    width: 3px;
-    height: 60px;
+    width: 4px;
+    height: 80px;
     background: linear-gradient(to top, 
         var(--color-smoke), 
         transparent);
@@ -173,12 +186,12 @@ body {
 
 @keyframes glow {
     0%, 100% {
-        opacity: 0.3;
+        opacity: 0.4;
         transform: translate(-50%, -50%) scale(1);
     }
     50% {
-        opacity: 0.6;
-        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1.3);
     }
 }
 
@@ -188,15 +201,15 @@ body {
         transform: translateY(0) translateX(-50%) scale(0.8);
     }
     10% {
-        opacity: 0.4;
+        opacity: 0.6;
     }
     70% {
-        opacity: 0.2;
-        transform: translateY(-100px) translateX(-50%) scale(1.5);
+        opacity: 0.3;
+        transform: translateY(-120px) translateX(-50%) scale(2);
     }
     100% {
         opacity: 0;
-        transform: translateY(-150px) translateX(-50%) scale(2);
+        transform: translateY(-180px) translateX(-50%) scale(3);
     }
 }
 
@@ -211,8 +224,10 @@ body {
     text-align: center;
     padding: var(--spacing-md);
     position: relative;
-    background: linear-gradient(to bottom, var(--color-paper-dark), var(--color-paper));
-    border-bottom: 1px solid rgba(139, 115, 85, 0.15);
+    background: linear-gradient(to bottom, 
+        var(--color-bg-medium), 
+        var(--color-bg-dark));
+    border-bottom: 1px solid rgba(212, 165, 116, 0.2);
 }
 
 .hero-content {
@@ -225,15 +240,16 @@ body {
     font-family: var(--font-serif);
     font-size: clamp(3rem, 8vw, 5.5rem);
     font-weight: 500;
-    color: var(--color-ink);
+    color: var(--color-text-primary);
     margin-bottom: var(--spacing-sm);
     letter-spacing: -0.02em;
     line-height: 1.1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .subtitle {
     font-size: clamp(1.1rem, 3vw, 1.4rem);
-    color: var(--color-ink-light);
+    color: var(--color-text-secondary);
     margin-bottom: var(--spacing-lg);
     font-style: italic;
     font-weight: 400;
@@ -241,7 +257,7 @@ body {
 
 .cta-button {
     background-color: var(--color-sepia);
-    color: var(--color-paper);
+    color: var(--color-bg-dark);
     border: none;
     padding: 1rem 2.5rem;
     font-size: 1.1rem;
@@ -255,9 +271,9 @@ body {
 }
 
 .cta-button:hover {
-    background-color: var(--color-accent);
+    background-color: var(--color-accent-light);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-medium), var(--glow-warm);
 }
 
 /* ====================================
@@ -280,13 +296,13 @@ body {
     font-family: var(--font-serif);
     font-size: clamp(2rem, 5vw, 2.8rem);
     font-weight: 500;
-    color: var(--color-ink);
+    color: var(--color-text-primary);
     margin-bottom: var(--spacing-sm);
     letter-spacing: -0.01em;
 }
 
 .section-description {
-    color: var(--color-ink-light);
+    color: var(--color-text-secondary);
     font-size: 1.1rem;
     font-style: italic;
 }
@@ -297,10 +313,11 @@ body {
 .write-section {
     margin-bottom: var(--spacing-xl);
     padding: var(--spacing-lg);
-    background-color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(139, 115, 85, 0.2);
+    background-color: rgba(61, 54, 46, 0.5);
+    border: 1px solid rgba(212, 165, 116, 0.3);
     box-shadow: var(--shadow-soft);
     animation: fadeIn 0.8s ease-out 0.3s both;
+    backdrop-filter: blur(10px);
 }
 
 .letter-form {
@@ -316,7 +333,7 @@ body {
     display: block;
     margin-bottom: var(--spacing-xs);
     font-weight: 600;
-    color: var(--color-ink);
+    color: var(--color-text-primary);
     font-size: 1rem;
 }
 
@@ -326,9 +343,9 @@ body {
     padding: 1rem;
     font-family: var(--font-body);
     font-size: 1.05rem;
-    color: var(--color-ink);
-    background-color: var(--color-paper);
-    border: 1px solid rgba(139, 115, 85, 0.3);
+    color: var(--color-text-primary);
+    background-color: rgba(26, 22, 18, 0.6);
+    border: 1px solid rgba(212, 165, 116, 0.4);
     border-radius: 2px;
     transition: all 0.3s ease;
     resize: vertical;
@@ -343,20 +360,21 @@ body {
 .form-group input[type="text"]:focus {
     outline: none;
     border-color: var(--color-sepia);
-    box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+    box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2);
+    background-color: rgba(26, 22, 18, 0.8);
 }
 
 .char-counter {
     text-align: right;
     font-size: 0.9rem;
-    color: var(--color-ink-light);
+    color: var(--color-text-muted);
     margin-top: var(--spacing-xs);
 }
 
 .submit-button {
     width: 100%;
     background-color: var(--color-sepia);
-    color: var(--color-paper);
+    color: var(--color-bg-dark);
     border: none;
     padding: 1.2rem 2rem;
     font-size: 1.15rem;
@@ -371,9 +389,9 @@ body {
 }
 
 .submit-button:hover:not(:disabled) {
-    background-color: var(--color-accent);
+    background-color: var(--color-accent-light);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-medium), var(--glow-warm);
 }
 
 .submit-button:disabled {
@@ -382,7 +400,7 @@ body {
 }
 
 .success-message {
-    background-color: rgba(157, 139, 122, 0.15);
+    background-color: rgba(212, 165, 116, 0.15);
     border: 1px solid var(--color-accent);
     padding: var(--spacing-md);
     border-radius: 2px;
@@ -392,7 +410,7 @@ body {
 }
 
 .success-message p {
-    color: var(--color-sepia);
+    color: var(--color-accent-light);
     font-size: 1.1rem;
     font-style: italic;
 }
@@ -407,7 +425,7 @@ body {
 .random-button {
     background-color: transparent;
     color: var(--color-sepia);
-    border: 1px solid var(--color-accent-light);
+    border: 1px solid var(--color-accent);
     padding: 0.6rem 1.5rem;
     font-size: 0.95rem;
     font-family: var(--font-body);
@@ -418,8 +436,9 @@ body {
 }
 
 .random-button:hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-paper);
+    background-color: var(--color-sepia);
+    color: var(--color-bg-dark);
+    box-shadow: var(--glow-warm);
 }
 
 .letters-container {
@@ -429,13 +448,14 @@ body {
 }
 
 .letter-card {
-    background-color: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(139, 115, 85, 0.2);
+    background-color: rgba(61, 54, 46, 0.5);
+    border: 1px solid rgba(212, 165, 116, 0.3);
     padding: var(--spacing-md);
     box-shadow: var(--shadow-soft);
     transition: all 0.4s ease;
     animation: fadeInScale 0.6s ease-out both;
     position: relative;
+    backdrop-filter: blur(10px);
 }
 
 .letter-card::before {
@@ -445,19 +465,20 @@ body {
     left: 15px;
     font-family: var(--font-serif);
     font-size: 4rem;
-    color: rgba(139, 115, 85, 0.1);
+    color: rgba(212, 165, 116, 0.15);
     line-height: 1;
 }
 
 .letter-card:hover {
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-medium), var(--glow-warm);
     transform: translateY(-3px);
+    border-color: rgba(212, 165, 116, 0.5);
 }
 
 .letter-content {
     font-size: 1.05rem;
     line-height: 1.8;
-    color: var(--color-ink);
+    color: var(--color-text-primary);
     margin-bottom: var(--spacing-sm);
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -466,14 +487,14 @@ body {
 .letter-signature {
     text-align: right;
     font-style: italic;
-    color: var(--color-ink-light);
+    color: var(--color-text-secondary);
     font-size: 1rem;
     margin-top: var(--spacing-sm);
 }
 
 .letter-date {
     font-size: 0.85rem;
-    color: var(--color-accent);
+    color: var(--color-text-muted);
     text-align: right;
     margin-top: var(--spacing-xs);
 }
@@ -481,14 +502,14 @@ body {
 .loading-state {
     text-align: center;
     padding: var(--spacing-lg);
-    color: var(--color-ink-light);
+    color: var(--color-text-secondary);
     font-style: italic;
 }
 
 .no-letters {
     text-align: center;
     padding: var(--spacing-xl);
-    color: var(--color-ink-light);
+    color: var(--color-text-secondary);
     font-style: italic;
 }
 
@@ -498,8 +519,8 @@ body {
 .footer {
     margin-top: var(--spacing-xl);
     padding: var(--spacing-lg) var(--spacing-md);
-    background-color: var(--color-paper-dark);
-    border-top: 1px solid rgba(139, 115, 85, 0.2);
+    background-color: var(--color-bg-medium);
+    border-top: 1px solid rgba(212, 165, 116, 0.2);
     position: relative;
     z-index: 2;
 }
@@ -512,7 +533,7 @@ body {
 
 .footer-text {
     font-size: 1rem;
-    color: var(--color-ink-light);
+    color: var(--color-text-secondary);
     margin-bottom: var(--spacing-sm);
 }
 
@@ -526,12 +547,12 @@ body {
 }
 
 .instagram-link:hover {
-    color: var(--color-accent);
+    color: var(--color-accent-light);
 }
 
 .footer-note {
     font-size: 0.95rem;
-    color: var(--color-ink-light);
+    color: var(--color-text-secondary);
     font-style: italic;
     margin-top: var(--spacing-sm);
 }
@@ -585,10 +606,10 @@ body {
    Responsive Design
    ==================================== */
 @media (max-width: 768px) {
-    /* Hide candle on mobile to avoid clutter */
     .candle-scene {
-        opacity: 0.2;
-        top: 15%;
+        opacity: 0.5;
+        top: 12%;
+        transform: translateX(-50%) scale(0.8);
     }
     
     .hero {
@@ -632,8 +653,8 @@ body {
     }
     
     .candle-scene {
-        opacity: 0.15;
-        transform: translateX(-50%) scale(0.7);
+        opacity: 0.4;
+        transform: translateX(-50%) scale(0.6);
     }
     
     .main-title {
