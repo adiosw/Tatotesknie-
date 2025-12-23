@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tato, tęsknię - Miejsce na słowa, których nie zdążyliśmy wypowiedzieć</title>
+    <meta name="description" content="Cyfrowy pomnik dla osób, które straciły ojca. Miejsce na słowa, których nie zdążyliśmy wypowiedzieć.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background subtle texture -->
+    <div class="page-texture"></div>
+
+    <!-- Candle Animation (subtle background) -->
+    <div class="candle-scene">
+        <div class="candle">
+            <div class="flame">
+                <div class="flame-glow"></div>
+            </div>
+            <div class="candle-body"></div>
+            <div class="smoke-trail"></div>
+            <div class="smoke-trail" style="animation-delay: 1.2s; left: 52%;"></div>
+            <div class="smoke-trail" style="animation-delay: 2.4s; left: 48%;"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="main-title">Tato, tęsknię.</h1>
+            <p class="subtitle">Miejsce na słowa, których nie zdążyliśmy wypowiedzieć</p>
+            <button class="cta-button" onclick="scrollToForm()">Napisz list</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Write Letter Section -->
+        <section class="write-section" id="write-section">
+            <div class="section-header">
+                <h2>Wyślij swoje słowa w niebo</h2>
+                <p class="section-description">Twój list zostanie dodany do strumienia wspomnień. Możesz pozostać anonimowy.</p>
+            </div>
+            
+            <form id="letter-form" class="letter-form">
+                <div class="form-group">
+                    <label for="letter-content">Twój list</label>
+                    <textarea 
+                        id="letter-content" 
+                        name="content" 
+                        rows="8" 
+                        placeholder="Drogi Tato..."
+                        required
+                        maxlength="2000"
+                    ></textarea>
+                    <div class="char-counter">
+                        <span id="char-count">0</span> / 2000 znaków
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="letter-signature">Podpis (opcjonalnie)</label>
+                    <input 
+                        type="text" 
+                        id="letter-signature" 
+                        name="signature" 
+                        placeholder="Zostaw puste, jeśli chcesz pozostać anonimowy"
+                        maxlength="100"
+                    >
+                </div>
+                
+                <button type="submit" class="submit-button">
+                    <span class="button-text">Wyślij w niebo</span>
+                    <span class="button-loading" style="display: none;">Wysyłam...</span>
+                </button>
+            </form>
+            
+            <div id="success-message" class="success-message" style="display: none;">
+                <p>Twój list został wysłany. Niech doleci tam, gdzie trzeba. 🕊️</p>
+            </div>
+        </section>
+
+        <!-- Letters Feed -->
+        <section class="letters-feed" id="letters-feed">
+            <div class="section-header">
+                <h2>Listy do nieba</h2>
+                <button class="random-button" onclick="showRandomLetter()">Wylosuj list</button>
+            </div>
+            
+            <div id="letters-container" class="letters-container">
+                <!-- Letters will be loaded here via JavaScript -->
+                <div class="loading-state">Ładuję listy...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">Projekt społeczny "Tato, tęsknię"</p>
+            <a href="https://instagram.com/tato_tesknie" target="_blank" class="instagram-link">
+                @tato_tesknie na Instagramie
+            </a>
+            <p class="footer-note">Miejsce stworzone z miłością i szacunkiem dla wszystkich, którzy tęsknią.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

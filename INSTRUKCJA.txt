@@ -1,0 +1,300 @@
+# 📖 INSTRUKCJA INSTALACJI - tatotesknie.pl
+
+## 🎯 Co otrzymujesz?
+
+Kompletny szablon strony internetowej składający się z:
+- `index.html` - struktura strony
+- `style.css` - stylizacja (papierowy, nostalgiczny design)
+- `script.js` - funkcjonalność (dodawanie i wyświetlanie listów)
+- Ten plik z instrukcjami
+
+## 🚀 KROK 1: Wybierz sposób hostingu (DARMOWY)
+
+### Opcja A: GitHub Pages (ZALECANE dla początkujących)
+
+1. Stwórz darmowe konto na https://github.com
+2. Kliknij "New repository" (zielony przycisk)
+3. Nazwij repozytorium: `tatotesknie` (lub dowolnie)
+4. Zaznacz "Public"
+5. Kliknij "Create repository"
+6. Wgraj wszystkie pliki (index.html, style.css, script.js)
+   - Kliknij "uploading an existing file"
+   - Przeciągnij wszystkie 3 pliki
+   - Kliknij "Commit changes"
+7. Przejdź do Settings → Pages
+8. W "Source" wybierz "main branch"
+9. Kliknij "Save"
+10. Po chwili strona będzie dostępna pod: `https://TWOJA_NAZWA.github.io/tatotesknie`
+
+### Opcja B: Netlify (bardziej zaawansowane, ale też łatwe)
+
+1. Stwórz konto na https://www.netlify.com
+2. Kliknij "Add new site" → "Deploy manually"
+3. Przeciągnij wszystkie 3 pliki (index.html, style.css, script.js)
+4. Strona będzie od razu dostępna pod losowym linkiem
+5. Możesz zmienić nazwę domeny w ustawieniach
+
+### Opcja C: Vercel
+
+1. Stwórz konto na https://vercel.com
+2. Kliknij "Add New..." → "Project"
+3. Przeciągnij folder z plikami
+4. Kliknij "Deploy"
+
+---
+
+## 🔥 KROK 2: Konfiguracja Firebase (BAZA DANYCH)
+
+Firebase to darmowa baza danych od Google. Dzięki niej listy będą zapisywane i wyświetlane na stronie.
+
+### 2.1 Stwórz projekt Firebase
+
+1. Wejdź na: https://console.firebase.google.com
+2. Kliknij "Add project" (Dodaj projekt)
+3. Nazwij projekt: `tatotesknie` (lub dowolnie)
+4. Wyłącz Google Analytics (nie jest potrzebny)
+5. Kliknij "Create project"
+
+### 2.2 Aktywuj Firestore Database
+
+1. W menu po lewej stronie kliknij "Firestore Database"
+2. Kliknij "Create database"
+3. Wybierz "Start in production mode"
+4. Wybierz lokalizację: `europe-west3` (Frankfurt - najbliżej Polski)
+5. Kliknij "Enable"
+
+### 2.3 Ustaw zasady bezpieczeństwa
+
+1. W Firestore kliknij zakładkę "Rules"
+2. Wklej poniższy kod:
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /letters/{letter} {
+      // Każdy może czytać listy
+      allow read: if true;
+      
+      // Każdy może dodawać listy, ale z ograniczeniami
+      allow create: if request.resource.data.keys().hasAll(['content', 'signature', 'timestamp', 'date'])
+                    && request.resource.data.content is string
+                    && request.resource.data.content.size() > 0
+                    && request.resource.data.content.size() <= 2000;
+      
+      // Nikt nie może edytować ani usuwać listów
+      allow update, delete: if false;
+    }
+  }
+}
+```
+
+3. Kliknij "Publish"
+
+### 2.4 Dodaj Firebase do swojej strony
+
+1. Kliknij ikonę koła zębatego (⚙️) → "Project settings"
+2. Przewiń w dół do sekcji "Your apps"
+3. Kliknij ikonę Web (`</>`)
+4. Nazwij aplikację: `tatotesknie-web`
+5. **NIE** zaznaczaj "Firebase Hosting"
+6. Kliknij "Register app"
+7. Skopiuj kod z sekcji `firebaseConfig` (wygląda tak):
+
+```javascript
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "tatotesknie-xxx.firebaseapp.com",
+  projectId: "tatotesknie-xxx",
+  storageBucket: "tatotesknie-xxx.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc..."
+};
+```
+
+### 2.5 Wklej konfigurację do script.js
+
+1. Otwórz plik `script.js`
+2. Znajdź na górze pliku (linie 6-13):
+
+```javascript
+const firebaseConfig = {
+    apiKey: "TWOJ_API_KEY",
+    authDomain: "TWOJ_PROJECT.firebaseapp.com",
+    projectId: "TWOJ_PROJECT_ID",
+    storageBucket: "TWOJ_PROJECT.appspot.com",
+    messagingSenderId: "TWOJ_SENDER_ID",
+    appId: "TWOJ_APP_ID"
+};
+```
+
+3. Zastąp to swoim kodem z Firebase Console
+4. Zapisz plik
+
+### 2.6 Dodaj biblioteki Firebase do index.html
+
+1. Otwórz plik `index.html`
+2. Znajdź linię `<script src="script.js"></script>` (ostatnia linia przed `</body>`)
+3. **PRZED** tą linią dodaj:
+
+```html
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="script.js"></script>
+```
+
+4. Zapisz plik
+
+---
+
+## 📤 KROK 3: Wgraj zaktualizowane pliki
+
+Jeśli zmieniałeś pliki lokalnie:
+
+**GitHub Pages:**
+- Wejdź do swojego repozytorium
+- Kliknij na plik który chcesz zaktualizować
+- Kliknij ikonę ołówka (Edit)
+- Wklej nową zawartość
+- Kliknij "Commit changes"
+
+**Netlify/Vercel:**
+- Przeciągnij zaktualizowane pliki ponownie
+- Lub podłącz repozytorium GitHub (wtedy będzie się automatycznie aktualizować)
+
+---
+
+## ✅ KROK 4: Testowanie
+
+1. Wejdź na swoją stronę
+2. Spróbuj napisać testowy list
+3. Kliknij "Wyślij w niebo"
+4. Odśwież stronę - list powinien się pojawić w sekcji "Listy do nieba"
+
+### Sprawdź w Firebase Console:
+1. Wejdź do Firebase Console → Firestore Database
+2. Powinieneś zobaczyć kolekcję `letters`
+3. W środku będą dokumenty z listami
+
+---
+
+## 🎨 PERSONALIZACJA (Opcjonalnie)
+
+### Zmiana kolorów
+
+Otwórz `style.css` i zmień wartości w sekcji `CSS Variables` (linie 6-13):
+
+```css
+:root {
+    --color-paper: #faf8f3;        /* Kolor tła */
+    --color-ink: #2d2d2d;          /* Kolor tekstu */
+    --color-sepia: #8b7355;        /* Kolor akcentu (przyciski) */
+    /* itd... */
+}
+```
+
+### Zmiana tekstu
+
+Edytuj `index.html`:
+- Linia 24: Główny tytuł
+- Linia 25: Podtytuł
+- Linia 33: Nagłówek sekcji formularza
+- Linia 100: Nagłówek sekcji listów
+
+### Zmiana czcionek
+
+W `index.html` linia 11 możesz zmienić fonty z Google Fonts:
+```html
+<link href="https://fonts.googleapis.com/css2?family=TWOJA_CZCIONKA&display=swap" rel="stylesheet">
+```
+
+Potem w `style.css` zaktualizuj zmienne:
+```css
+--font-serif: 'TWOJA_CZCIONKA', serif;
+```
+
+---
+
+## 🛡️ MODERACJA TREŚCI
+
+Aby usunąć niepożądany list:
+
+1. Wejdź do Firebase Console → Firestore Database
+2. Znajdź kolekcję `letters`
+3. Kliknij na dokument który chcesz usunąć
+4. Kliknij ikonę kosza (Delete document)
+5. Potwierdź usunięcie
+6. Odśwież stronę - list zniknie
+
+**UWAGA:** Możesz też zmienić zasady w Firestore Rules, aby wymagać autoryzacji dla tworzenia listów, ale to wymaga więcej konfiguracji.
+
+---
+
+## 🔗 Podłączenie własnej domeny (Opcjonalnie)
+
+### GitHub Pages:
+1. Kup domenę (np. na https://www.ovh.pl, https://www.nazwa.pl)
+2. W ustawieniach domeny dodaj CNAME wskazujący na: `TWOJA_NAZWA.github.io`
+3. W GitHub → Settings → Pages wpisz swoją domenę
+
+### Netlify/Vercel:
+1. W ustawieniach strony kliknij "Add custom domain"
+2. Wpisz swoją domenę
+3. Zaktualizuj DNS zgodnie z instrukcjami
+
+---
+
+## 📱 Podłączenie Instagrama
+
+W pliku `index.html` linia 97 zmień link:
+```html
+<a href="https://instagram.com/tato_tesknie" target="_blank">
+```
+
+Możesz też dodać link w stopce na dole strony.
+
+---
+
+## 🆘 ROZWIĄZYWANIE PROBLEMÓW
+
+### "Listy się nie zapisują"
+- Sprawdź czy poprawnie skopiowałeś `firebaseConfig` do `script.js`
+- Sprawdź w Konsoli przeglądarki (F12) czy nie ma błędów
+- Sprawdź czy dodałeś biblioteki Firebase do `index.html`
+
+### "Nie widzę żadnych listów"
+- Sprawdź czy Firebase Rules są poprawnie ustawione
+- Sprawdź w Firebase Console czy listy są w bazie danych
+- Sprawdź konsolę przeglądarki (F12) czy nie ma błędów
+
+### "Strona nie działa na telefonie"
+- Strona jest w pełni responsywna, spróbuj wyczyścić cache przeglądarki
+- Na iOS/Safari czasem trzeba poczekać dłużej na załadowanie
+
+---
+
+## 💝 Dodatkowe funkcje (możesz dodać później)
+
+1. **System powiadomień email** - gdy ktoś doda list
+2. **Limit dziennych listów** - aby zapobiec spamowi
+3. **Captcha** - ochrona przed botami
+4. **Eksport listów do PDF** - do archiwizacji
+5. **Muzyka w tle** - nostalgiczne pianino
+
+Jeśli potrzebujesz pomocy z którąś z tych funkcji, daj znać!
+
+---
+
+## 📞 Wsparcie
+
+Jeśli masz pytania lub problemy:
+1. Sprawdź konsolę przeglądarki (F12) - tam często są szczegóły błędów
+2. Sprawdź Firebase Console - czy dane się zapisują
+3. Upewnij się, że wszystkie pliki są wgrane na hosting
+
+---
+
+Powodzenia z projektem "Tato, tęsknię"! 🕊️
+To piękna inicjatywa, która pomoże wielu osobom.
