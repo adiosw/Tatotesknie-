@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styl.css">
 </head>
 <body>
     <!-- Background subtle texture -->
@@ -28,6 +28,19 @@
         <div class="hero-content">
             <h1 class="main-title">Tato, tęsknię.</h1>
             <p class="subtitle">Miejsce na słowa, których nie zdążyliśmy wypowiedzieć</p>
+            
+            <!-- Letter Counter -->
+            <div class="letter-counter">
+                <span class="counter-icon">🕊️</span>
+                <span id="total-letters-count">0</span>
+                <span class="counter-text">listów wysłanych do nieba</span>
+            </div>
+            
+            <!-- Random Quote -->
+            <div class="quote-container">
+                <p class="quote-text" id="random-quote"></p>
+            </div>
+            
             <button class="cta-button" onclick="scrollToForm()">Napisz list</button>
         </div>
     </header>
@@ -67,6 +80,18 @@
                         placeholder="Zostaw puste, jeśli chcesz pozostać anonimowy"
                         maxlength="100"
                     >
+                </div>
+                
+                <div class="form-group">
+                    <label for="years-passed">Ile lat minęło? (opcjonalnie)</label>
+                    <input 
+                        type="text" 
+                        id="years-passed" 
+                        name="yearsPassed" 
+                        placeholder="np. 3 lata, 6 miesięcy, 10 lat..."
+                        maxlength="50"
+                    >
+                    <small class="field-note">To pomoże innym zrozumieć Twoją historię</small>
                 </div>
                 
                 <div class="form-group checkbox-group">
@@ -156,6 +181,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <script src="script.js"></script>
+    <script src="skrypt.js"></script>
 </body>
 </html>

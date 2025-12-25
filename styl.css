@@ -1,0 +1,1072 @@
+/* ====================================
+   CSS Variables - DARK THEME Color Palette
+   ==================================== */
+:root {
+    /* Dark nostalgic colors - nocny pamiętnik */
+    --color-bg-dark: #1a1612;
+    --color-bg-medium: #2a241f;
+    --color-paper-dark: #332d26;
+    --color-paper: #3d362e;
+    
+    --color-text-primary: #e8dfd2;
+    --color-text-secondary: #c4b5a0;
+    --color-text-muted: #9d8b7a;
+    
+    --color-sepia: #d4a574;
+    --color-accent: #c4976f;
+    --color-accent-light: #e5c9a8;
+    
+    /* Candle colors - bardziej widoczne na ciemnym tle */
+    --color-flame: #ffa500;
+    --color-flame-bright: #ffcc00;
+    --color-flame-core: #fff5e6;
+    --color-smoke: rgba(228, 201, 168, 0.25);
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 3rem;
+    --spacing-xl: 4rem;
+    
+    /* Typography */
+    --font-serif: 'Playfair Display', serif;
+    --font-body: 'Crimson Text', serif;
+    
+    /* Shadows - dostosowane do ciemnego tła */
+    --shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.4);
+    --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.6);
+    --glow-warm: 0 0 20px rgba(212, 165, 116, 0.3);
+}
+
+/* ====================================
+   Global Resets & Base Styles
+   ==================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+    font-size: 18px;
+    overflow-x: hidden;
+}
+
+/* Subtle paper texture overlay */
+.page-texture {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(228, 201, 168, 0.03) 2px,
+            rgba(228, 201, 168, 0.03) 4px
+        );
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+/* ====================================
+   CANDLE ANIMATION - Positioned between sections
+   ==================================== */
+.candle-scene {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.8);
+    width: 120px;
+    height: 250px;
+    z-index: 1;
+    opacity: 0.9;
+    pointer-events: none;
+    filter: drop-shadow(0 0 40px rgba(255, 165, 0, 0.7));
+}
+
+.letters-feed {
+    margin-top: var(--spacing-xl);
+    position: relative;
+    min-height: 400px;
+}
+
+/* Candle body - większa i jaśniejsza */
+.candle-body {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 100px;
+    background: linear-gradient(to bottom, 
+        rgba(230, 200, 150, 0.9), 
+        rgba(212, 165, 116, 1));
+    border-radius: 4px 4px 0 0;
+    box-shadow: 
+        0 0 30px rgba(255, 165, 0, 0.6),
+        inset 0 -10px 20px rgba(139, 115, 85, 0.3);
+    border: 1px solid rgba(255, 200, 100, 0.4);
+}
+
+/* Flame - DUŻO większy i jaśniejszy */
+.flame {
+    position: absolute;
+    bottom: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 38px;
+    height: 65px;
+    background: linear-gradient(to top, 
+        #ff8800 0%, 
+        #ffbb00 40%,
+        #ffdd00 70%, 
+        #fffacd 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flicker 1.8s ease-in-out infinite;
+    filter: blur(0.5px);
+    box-shadow: 
+        0 0 40px rgba(255, 165, 0, 1),
+        0 0 80px rgba(255, 165, 0, 0.7),
+        0 0 120px rgba(255, 140, 0, 0.4),
+        inset 0 0 20px rgba(255, 255, 200, 0.9);
+}
+
+.flame-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 110px;
+    background: radial-gradient(circle, 
+        rgba(255, 220, 100, 0.9) 0%, 
+        rgba(255, 165, 0, 0.6) 30%,
+        rgba(255, 140, 0, 0.3) 60%,
+        transparent 80%);
+    border-radius: 50%;
+    animation: glow 1.8s ease-in-out infinite;
+}
+
+/* Smoke trails - BARDZO widoczny dym */
+.smoke-trail {
+    position: absolute;
+    bottom: 160px;
+    left: 50%;
+    width: 10px;
+    height: 140px;
+    background: linear-gradient(to top, 
+        rgba(240, 230, 210, 0.8), 
+        rgba(220, 210, 200, 0.5),
+        rgba(200, 190, 180, 0.3),
+        transparent);
+    border-radius: 50%;
+    animation: smoke-rise 5s ease-in-out infinite;
+    opacity: 0;
+    filter: blur(4px);
+}
+
+/* ====================================
+   CANDLE ANIMATIONS
+   ==================================== */
+@keyframes flicker {
+    0%, 100% {
+        transform: translateX(-50%) scale(1, 1);
+        opacity: 1;
+    }
+    25% {
+        transform: translateX(-50%) scale(0.95, 1.05);
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateX(-50%) scale(1.02, 0.98);
+        opacity: 1;
+    }
+    75% {
+        transform: translateX(-50%) scale(0.98, 1.02);
+        opacity: 0.95;
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        opacity: 0.4;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1.3);
+    }
+}
+
+@keyframes smoke-rise {
+    0% {
+        opacity: 0;
+        transform: translateY(0) translateX(-50%) scale(1);
+        filter: blur(2px);
+    }
+    15% {
+        opacity: 0.7;
+        filter: blur(3px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translateY(-100px) translateX(calc(-50% + 15px)) scale(2.5) rotate(20deg);
+        filter: blur(5px);
+    }
+    80% {
+        opacity: 0.2;
+        transform: translateY(-180px) translateX(calc(-50% - 10px)) scale(4) rotate(-15deg);
+        filter: blur(8px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-250px) translateX(-50%) scale(5) rotate(0deg);
+        filter: blur(10px);
+    }
+}
+
+/* ====================================
+   Hero Section
+   ==================================== */
+.hero {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-md);
+    position: relative;
+    background: var(--color-bg-dark);
+    border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+.hero-content {
+    max-width: 700px;
+    z-index: 2;
+    animation: fadeInUp 1.2s ease-out;
+}
+
+.main-title {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.subtitle {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* Letter Counter */
+.letter-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: rgba(212, 165, 116, 0.1);
+    border: 1px solid rgba(212, 165, 116, 0.3);
+    border-radius: 50px;
+    display: inline-flex;
+}
+
+.counter-icon {
+    font-size: 1.5rem;
+}
+
+#total-letters-count {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-sepia);
+    font-family: var(--font-serif);
+}
+
+.counter-text {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+}
+
+/* Quote Container */
+.quote-container {
+    max-width: 600px;
+    margin: var(--spacing-lg) auto;
+    padding: var(--spacing-md);
+    border-left: 3px solid var(--color-sepia);
+    background-color: rgba(212, 165, 116, 0.05);
+}
+
+.quote-text {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.cta-button {
+    background-color: var(--color-sepia);
+    color: var(--color-bg-dark);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-soft);
+    letter-spacing: 0.03em;
+}
+
+.cta-button:hover {
+    background-color: var(--color-accent-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium), var(--glow-warm);
+}
+
+/* ====================================
+   Container & Layout
+   ==================================== */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+    position: relative;
+    z-index: 2;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.section-header h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: -0.01em;
+}
+
+.section-description {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* ====================================
+   Write Letter Section (Form)
+   ==================================== */
+.write-section {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background-color: rgba(61, 54, 46, 0.5);
+    border: 1px solid rgba(212, 165, 116, 0.3);
+    box-shadow: var(--shadow-soft);
+    animation: fadeIn 0.8s ease-out 0.3s both;
+    backdrop-filter: blur(10px);
+}
+
+.letter-form {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+}
+
+.form-group textarea,
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 1rem;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-primary);
+    background-color: rgba(26, 22, 18, 0.6);
+    border: 1px solid rgba(212, 165, 116, 0.4);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    resize: vertical;
+}
+
+.field-note {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-xs);
+    font-style: italic;
+}
+
+/* Checkbox group styling */
+.checkbox-group {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background-color: rgba(212, 165, 116, 0.08);
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    border-radius: 2px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: var(--spacing-sm);
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--color-sepia);
+    flex-shrink: 0;
+}
+
+.checkbox-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+}
+
+.privacy-link {
+    color: var(--color-sepia);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.privacy-link:hover {
+    color: var(--color-accent-light);
+}
+
+.form-group textarea {
+    min-height: 200px;
+    line-height: 1.8;
+}
+
+.form-group textarea:focus,
+.form-group input[type="text"]:focus {
+    outline: none;
+    border-color: var(--color-sepia);
+    box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2);
+    background-color: rgba(26, 22, 18, 0.8);
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-xs);
+}
+
+.submit-button {
+    width: 100%;
+    background-color: var(--color-sepia);
+    color: var(--color-bg-dark);
+    border: none;
+    padding: 1.2rem 2rem;
+    font-size: 1.15rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-soft);
+    letter-spacing: 0.03em;
+    margin-top: var(--spacing-sm);
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: var(--color-accent-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium), var(--glow-warm);
+}
+
+.submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.success-message {
+    background-color: rgba(212, 165, 116, 0.15);
+    border: 1px solid var(--color-accent);
+    padding: var(--spacing-md);
+    border-radius: 2px;
+    text-align: center;
+    margin-top: var(--spacing-md);
+    animation: slideDown 0.5s ease-out;
+}
+
+.success-message p {
+    color: var(--color-accent-light);
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* ====================================
+   Letters Feed Section
+   ==================================== */
+.letters-feed {
+    margin-top: var(--spacing-xl);
+}
+
+.random-button {
+    background-color: transparent;
+    color: var(--color-sepia);
+    border: 1px solid var(--color-accent);
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    margin-left: var(--spacing-sm);
+}
+
+.random-button:hover {
+    background-color: var(--color-sepia);
+    color: var(--color-bg-dark);
+    box-shadow: var(--glow-warm);
+}
+
+.letters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    grid-auto-flow: dense;
+}
+
+.letter-card {
+    background-color: rgba(61, 54, 46, 0.5);
+    border: 1px solid rgba(212, 165, 116, 0.3);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s ease;
+    animation: fadeInScale 0.6s ease-out both;
+    position: relative;
+    backdrop-filter: blur(10px);
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+/* Różne wysokości dla efektu masonry */
+.letter-card:nth-child(3n+1) {
+    grid-row: span 1;
+}
+
+.letter-card:nth-child(3n+2) {
+    grid-row: span 1;
+}
+
+.letter-card:nth-child(3n) {
+    grid-row: span 1;
+}
+
+.letter-card::before {
+    content: '"';
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-family: var(--font-serif);
+    font-size: 4rem;
+    color: rgba(212, 165, 116, 0.15);
+    line-height: 1;
+}
+
+.letter-card:hover {
+    box-shadow: var(--shadow-medium), var(--glow-warm);
+    transform: translateY(-3px);
+    border-color: rgba(212, 165, 116, 0.5);
+}
+
+.letter-content {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.letter-signature {
+    text-align: right;
+    font-style: italic;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    margin-top: var(--spacing-sm);
+}
+
+.letter-date {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-align: right;
+    margin-top: var(--spacing-xs);
+}
+
+.letter-years {
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-align: right;
+    margin-top: var(--spacing-xs);
+    font-style: italic;
+}
+
+/* Candle Lighting Feature */
+.candle-actions {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid rgba(212, 165, 116, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+}
+
+.candle-button {
+    background: none;
+    border: 1px solid rgba(212, 165, 116, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.candle-button:hover {
+    background-color: rgba(212, 165, 116, 0.1);
+    border-color: var(--color-sepia);
+}
+
+.candle-button.lit {
+    background-color: rgba(212, 165, 116, 0.2);
+    border-color: var(--color-sepia);
+    color: var(--color-sepia);
+}
+
+.candle-icon {
+    font-size: 1.2rem;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.candle-button.lit .candle-icon {
+    filter: grayscale(0%);
+    animation: flameFlicker 1.5s ease-in-out infinite;
+}
+
+@keyframes flameFlicker {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.loading-state {
+    text-align: center;
+    padding: var(--spacing-lg);
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.no-letters {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+/* ====================================
+   Footer
+   ==================================== */
+.footer {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg) var(--spacing-md);
+    background-color: var(--color-bg-medium);
+    border-top: 1px solid rgba(212, 165, 116, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+.footer-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-text {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.instagram-link {
+    display: inline-block;
+    color: var(--color-sepia);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    transition: color 0.3s ease;
+}
+
+.instagram-link:hover {
+    color: var(--color-accent-light);
+}
+
+.footer-note {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Privacy Policy Section */
+.privacy-section {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background-color: rgba(61, 54, 46, 0.3);
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    border-radius: 2px;
+    text-align: left;
+}
+
+.privacy-section h3 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    text-align: center;
+}
+
+.privacy-section p {
+    color: var(--color-text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-sm);
+    font-size: 0.95rem;
+}
+
+.privacy-section strong {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.privacy-contact {
+    margin-top: var(--spacing-md);
+    text-align: center;
+    font-style: italic;
+}
+
+.privacy-contact a {
+    color: var(--color-sepia);
+    text-decoration: underline;
+}
+
+/* ====================================
+   Animations
+   ==================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animacja listu lecącego w niebo */
+@keyframes flyToHeaven {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1) rotate(0deg);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -100px) scale(0.9) rotate(5deg);
+    }
+    40% {
+        opacity: 0.8;
+        transform: translate(-45%, -250px) scale(0.7) rotate(-3deg);
+    }
+    60% {
+        opacity: 0.6;
+        transform: translate(-52%, -400px) scale(0.5) rotate(8deg);
+    }
+    80% {
+        opacity: 0.3;
+        transform: translate(-48%, -600px) scale(0.3) rotate(-5deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -800px) scale(0.1) rotate(0deg);
+    }
+}
+
+/* Kontenery na animację */
+.flying-letter-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.flying-letter {
+    width: 300px;
+    padding: var(--spacing-md);
+    background-color: rgba(250, 248, 243, 0.95);
+    border: 2px solid rgba(212, 165, 116, 0.6);
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(255, 165, 0, 0.4);
+    border-radius: 2px;
+    animation: flyToHeaven 3s ease-in-out forwards;
+    backdrop-filter: blur(10px);
+}
+
+.flying-letter-content {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-ink);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-sm);
+    max-height: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.flying-letter-signature {
+    text-align: right;
+    font-style: italic;
+    color: var(--color-ink-light);
+    font-size: 0.9rem;
+}
+
+/* Iskierki towarzyszące listowi */
+@keyframes sparkle {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+    }
+}
+
+.sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255, 220, 100, 0.9);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 220, 100, 0.8);
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+.sparkle:nth-child(1) {
+    top: 10%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.sparkle:nth-child(2) {
+    top: 30%;
+    right: 15%;
+    animation-delay: 0.3s;
+}
+
+.sparkle:nth-child(3) {
+    bottom: 20%;
+    left: 25%;
+    animation-delay: 0.6s;
+}
+
+.sparkle:nth-child(4) {
+    top: 50%;
+    right: 20%;
+    animation-delay: 0.9s;
+}
+
+.sparkle:nth-child(5) {
+    bottom: 30%;
+    left: 50%;
+    animation-delay: 1.2s;
+}
+
+/* ====================================
+   Responsive Design
+   ==================================== */
+@media (max-width: 768px) {
+    .candle-scene {
+        opacity: 0.85;
+        transform: translate(-50%, -50%) scale(1.3);
+    }
+    
+    .letters-feed {
+        min-height: 350px;
+    }
+    
+    /* Masonry 2 kolumny na tablet */
+    .letters-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .hero {
+        min-height: 75vh;
+        padding: var(--spacing-sm);
+    }
+    
+    .main-title {
+        font-size: 3rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .container {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+    
+    .write-section {
+        padding: var(--spacing-md);
+    }
+    
+    .section-header h2 {
+        font-size: 2rem;
+    }
+    
+    .random-button {
+        display: block;
+        margin: var(--spacing-sm) auto 0;
+    }
+    
+    .letter-card {
+        padding: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .candle-scene {
+        opacity: 0.75;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    
+    .letters-feed {
+        min-height: 300px;
+    }
+    
+    /* Masonry 1 kolumna na mobile */
+    .letters-container {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Mniejszy lecący list na mobile */
+    .flying-letter {
+        width: 250px;
+        padding: var(--spacing-sm);
+    }
+    
+    .flying-letter-content {
+        font-size: 0.9rem;
+        max-height: 120px;
+    }
+    
+    .main-title {
+        font-size: 2.5rem;
+    }
+    
+    .cta-button {
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+    }
+    
+    .form-group textarea {
+        min-height: 180px;
+        font-size: 1rem;
+    }
+}
+
+/* ====================================
+   Staggered Animation for Letters
+   ==================================== */
+.letter-card:nth-child(1) { animation-delay: 0.1s; }
+.letter-card:nth-child(2) { animation-delay: 0.2s; }
+.letter-card:nth-child(3) { animation-delay: 0.3s; }
+.letter-card:nth-child(4) { animation-delay: 0.4s; }
+.letter-card:nth-child(5) { animation-delay: 0.5s; }
+.letter-card:nth-child(n+6) { animation-delay: 0.6s; }
