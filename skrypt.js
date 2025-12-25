@@ -217,7 +217,11 @@ async function loadLetters() {
         // Update counter
         updateLetterCounter(letters.length);
         
-        container.innerHTML = letters.map((letter, index) => `
+        // Show only first 3 letters initially
+        const initialLetters = letters.slice(0, 3);
+        const remainingLetters = letters.slice(3);
+        
+        let html = initialLetters.map((letter, index) => `
             <div class="letter-card" style="animation-delay: ${index * 0.1}s" data-letter-id="${letter.id || index}">
                 <div class="letter-content">${escapeHtml(letter.content)}</div>
                 <div class="letter-signature">— ${escapeHtml(letter.signature)}</div>
@@ -231,6 +235,37 @@ async function loadLetters() {
                 </div>
             </div>
         `).join('');
+        
+        // Add "Show More" button if there are more letters
+        if (remainingLetters.length > 0) {
+            html += `
+                <div class="show-more-container">
+                    <button class="show-more-button" onclick="showAllLetters()">
+                        <span class="show-more-icon">📜</span>
+                        <span class="show-more-text">Otwórz Skrzynię Wspomnień</span>
+                        <span class="show-more-count">(${remainingLetters.length} więcej ${remainingLetters.length === 1 ? 'list' : remainingLetters.length < 5 ? 'listy' : 'listów'})</span>
+                    </button>
+                </div>
+                <div id="remaining-letters" class="remaining-letters" style="display: none;">
+                    ${remainingLetters.map((letter, index) => `
+                        <div class="letter-card" style="animation-delay: ${(index + 3) * 0.1}s" data-letter-id="${letter.id || (index + 3)}">
+                            <div class="letter-content">${escapeHtml(letter.content)}</div>
+                            <div class="letter-signature">— ${escapeHtml(letter.signature)}</div>
+                            ${letter.yearsPassed ? `<div class="letter-years">⏳ ${escapeHtml(letter.yearsPassed)}</div>` : ''}
+                            <div class="letter-date">${letter.date}</div>
+                            <div class="candle-actions">
+                                <button class="candle-button" onclick="lightCandle('${letter.id || (index + 3)}')" data-candle-btn="${letter.id || (index + 3)}">
+                                    <span class="candle-icon">🕯️</span>
+                                    <span class="candle-count" data-candle-count="${letter.id || (index + 3)}">${letter.candles || 0}</span>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
         
     } catch (error) {
         console.error('Błąd podczas ładowania listów:', error);
@@ -343,6 +378,30 @@ window.showRandomLetter = async function() {
     } catch (error) {
         console.error('Błąd podczas losowania listu:', error);
         alert('Nie udało się wylosować listu.');
+    }
+};
+
+// ====================================
+// Show All Letters Function
+// ====================================
+window.showAllLetters = function() {
+    const remainingLetters = document.getElementById('remaining-letters');
+    const button = document.querySelector('.show-more-button');
+    
+    if (remainingLetters && button) {
+        remainingLetters.style.display = 'grid';
+        button.style.display = 'none';
+        
+        // Restore lit candles for newly shown letters
+        setTimeout(() => {
+            const litCandles = JSON.parse(localStorage.getItem('lit_candles') || '[]');
+            litCandles.forEach(letterId => {
+                const candleButton = document.querySelector(`[data-candle-btn="${letterId}"]`);
+                if (candleButton) {
+                    candleButton.classList.add('lit');
+                }
+            });
+        }, 100);
     }
 };
 
